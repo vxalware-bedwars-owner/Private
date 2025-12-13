@@ -2887,7 +2887,9 @@ run(function()
 		Tooltip = 'Prevents slowing down when using items.'
 	})
 end)
-	
+
+-- line 2890 (skidded from VapeV4 by TheHolyJay)
+-- Projectile Aimbot Code, All rights reserved
 run(function()
 	local TargetPart
 	local Targets
