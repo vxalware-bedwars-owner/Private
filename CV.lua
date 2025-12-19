@@ -30,36 +30,24 @@ local AutoExec = [[
     end
 ]]
 
-local function FindFunc()
-    local success = false
-
-    if not success and type(queue_on_teleport) == "function" then
-        pcall(function()
-            queue_on_teleport(AutoExec)
-            success = true
-        end)
+local HolyWrapper = [[
+    if type(queue_on_teleport) == "function" then
+        queue_on_teleport(...)
+    elseif type(queueonteleport) == "function" then
+        queueonteleport(...)
     end
+]] .. "\n" .. AutoExec
 
-    if not success and type(queueonteleport) == "function" then
-        pcall(function()
-            queueonteleport(AutoExec)
-            success = true
-        end)
-    end
-
-    if not success then
-        warn("Failed to find executor queue_on_teleport function!")
+local function Queue()
+    if type(queue_on_teleport) == "function" then
+        queue_on_teleport(string.format(HolyWrapper, string.format("%q", HolyWrapper)))
+    elseif type(queueonteleport) == "function" then
+        queueonteleport(string.format(HolyWrapper, string.format("%q", HolyWrapper)))
+    else
+        warn("No 'queue on teleport' function found")
     end
 end
 
-FindFunc()
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-player.OnTeleport:Connect(function(state)
-    if state == Enum.TeleportState.Started then
-        FindFunc()
-    end
-end)
+Queue()
 
 loadstring(AutoExec)()
