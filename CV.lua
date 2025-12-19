@@ -48,14 +48,18 @@ local function FindFunc()
     end
 
     if not success then
-        error("Failed to find executor queue_on_teleport function!")
+        warn("Failed to find executor queue_on_teleport function!")
     end
 end
 
 FindFunc()
 
-game:GetService("Players").LocalPlayer.OnTeleport:Connect(function()
-    FindFunc()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+player.OnTeleport:Connect(function(state)
+    if state == Enum.TeleportState.Started then
+        FindFunc()
+    end
 end)
 
 loadstring(AutoExec)()
