@@ -30,12 +30,32 @@ local AutoExec = [[
     end
 ]]
 
-local queued = false
-pcall(function()
-    if queue_on_teleport then
-        queue_on_teleport(AutoExec)
-        queued = true
+local function FindFunc()
+    local success = false
+
+    if not success and type(queue_on_teleport) == "function" then
+        pcall(function()
+            queue_on_teleport(AutoExec)
+            success = true
+        end)
     end
+
+    if not success and type(queueonteleport) == "function" then
+        pcall(function()
+            queueonteleport(AutoExec)
+            success = true
+        end)
+    end
+
+    if not success then
+        error("Failed to find executor queue_on_teleport function!")
+    end
+end
+
+FindFunc()
+
+game:GetService("Players").LocalPlayer.OnTeleport:Connect(function()
+    FindFunc()
 end)
 
 loadstring(AutoExec)()
