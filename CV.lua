@@ -1,5 +1,7 @@
 --> Load Instances <--
+local Properties = Instance.new("TextChatMessageProperties")
 local TextChatService = game:GetService("TextChatService")
+local RunService = game.GetService("RunService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
@@ -50,43 +52,32 @@ local Owner = {
 }
 
 local Premium = {
-    ["Premium_User"] = true,
+    ["Yourlocalnoob520"] = true,
 }
 
 local BetaTester = {
-    ["Beta_Tester"] = true,
+    [""] = true,
 }
 
-if Owner[player.Name] then
-    TextChatService.OnIncomingMessage = function(message)
-        local properties = Instance.new("TextChatMessageProperties")
-        if message.TextSource and message.TextSource.UserId == player.UserId then
-            properties.PrefixText = "<font color='#ff0000'>[Owner]</font> " .. (message.PrefixText or "")
-        end
-        return properties
+local function OverrideHandler(message)
+    if not message.TextSource or message.TestSource.UserId ~= player.UserId then
+        return
     end
-elseif Premium[player.Name] then
-    TextChatService.OnIncomingMessage = function(message)
-        local properties = Instance.new("TextChatMessageProperties")
-        if message.TextSource and message.TextSource.UserId == player.UserId then
-            properties.PrefixText = "<font color='#9000ff'>[Premium]</font> " .. (message.PrefixText or "")
-        end
-        return properties
+
+    if Owner[player.Name] then
+        Properties.PrefixText = "<font color='#eb4034'>[Owner]</font>"
+    elseif Premium[player.Name] then
+        Properties.PrefixText = "<font color='#a834eb'>[Premium]</font>"
+    elseif BetaTester[player.Name] then
+        Properties.PrefixText = "<font color='#ed7409'>[Beta Tester]</font>"
+    else
+        Properties.PrefixText = "<font color='#0970ed'>[Vxalware]</font>"
     end
-elseif BetaTester[player.Name] then
-    TextChatService.OnIncomingMessage = function(message)
-        local properties = Instance.new("TextChatMessageProperties")
-        if message.TextSource and message.TextSource.UserId == player.UserId then
-            properties.PrefixText = "<font color='#ed7409'>[Beta Tester]</font> " .. (message.PrefixText or "")
-        end
-        return properties
-    end
-else
-    TextChatService.OnIncomingMessage = function(message)
-        local properties = Instance.new("TextChatMessageProperties")
-        if message.TextSource and message.TextSource.UserId == player.UserId then
-            properties.PrefixText = "<font color='#0970ed'>[Vxalware]</font> " .. (message.PrefixText or "")
-        end
-        return properties
-    end
+    Properties.PrefixText ..=(message.PrefixText or "")
+    return Properties
 end
+
+TextChatService.OnIncomingMessage = OverrideHandler
+RunService.Heartbeat:Connect(function()
+    TextChatService.OnIncomingMessage = OverrideHandler
+end)
