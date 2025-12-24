@@ -56,7 +56,7 @@ local Premium = {
 }
 
 local BetaTester = {
-    [""] = true,
+    ["YourlocalSploiter1"] = true,
 }
 
 local function OverrideHandler(message)
