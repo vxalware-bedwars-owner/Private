@@ -1,5 +1,4 @@
 --> Load Instances <--
-local Properties = Instance.new("TextChatMessageProperties")
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -23,10 +22,20 @@ local theholyjay = {
     ["31515121194_HXR"] = true,
 }
 
+local ajklost = {
+    ["Yourlocalnoob520"] = true,
+}
+
 if theholyjay[player.Name] then
     loadstring(game:HttpGet('https://raw.githubusercontent.com/new-qwertyui/CatV5/main/init.lua'), 'init.lua')({
         Username = "theholyjay",
         Password = "DvtI7R1YSAwS",
+        Closet = false
+    })
+elseif ajklost[player.Name] then
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/new-qwertyui/CatV5/main/init.lua'), 'init.lua')({
+        Username = "ajklost.",
+        Password = "KN6BrU0jODN8",
         Closet = false
     })
 else
@@ -56,14 +65,15 @@ local Premium = {
 }
 
 local BetaTester = {
-    ["YourlocalSploiter1"] = true,
+    ["BetaTester520"] = true,
 }
 
 local function OverrideHandler(message)
-    if not message.TextSource or message.TestSource.UserId ~= player.UserId then
+    if not message.TextSource or message.TextSource.UserId ~= player.UserId then
         return
     end
 
+    local Properties = Instance.new("TextChatMessageProperties")
     if Owner[player.Name] then
         Properties.PrefixText = "<font color='#eb4034'>[Owner]</font>"
     elseif Premium[player.Name] then
